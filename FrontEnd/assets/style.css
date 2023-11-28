@@ -58,6 +58,14 @@ header {
 	justify-content: space-between;
 	margin: 50px 0
 }
+
+/** Logo insta **/
+.logo-instagram {
+	width: 19px;
+	height: 19px;
+}
+
+/** Page **/
 section {
 	margin: 50px 0
 }
@@ -95,9 +103,16 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
+nav li:hover,
+nav a:hover {
 	color: #B1663C;
 }
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -196,7 +211,7 @@ footer nav ul {
 	gap: 15px;
 }
 
-.filter {
+.filter, .login-btn {
 	font-family: 'Syne';
 	color: #1D6154;
 	background-color: white;
@@ -210,3 +225,10 @@ footer nav ul {
 	color: white;
 	cursor: pointer;
 }
+
+/** Login **/
+.login-btn:hover {
+	background-color: #227566 ;
+}
+
+
