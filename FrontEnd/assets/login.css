@@ -1,0 +1,70 @@
+/** Login page **/
+
+body {
+    min-height: 95vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    margin: 50px 0
+}
+
+h2 {
+    color: #1D6154;
+    font-weight: 300;
+    margin-top: 60px;
+}
+
+a {
+    padding-top: 15px;
+}
+
+.login-btn {
+    background-color: #1D6154;
+    color: white;
+    margin-top: 10px;
+    width: 15%
+}
+
+.login-position {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-position {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+input[type="email"],
+input[type="password"] {
+    border: none;
+    box-shadow: 0px 0px 10px 4px rgba(235, 231, 231, 0.911);
+    padding: 15px;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.error-message {
+    color: rgb(224, 3, 3);
+    padding-top: 9px;
+    padding-bottom: 6px;
+    visibility: hidden;
+}
+
+footer {
+    display: flex;
+    justify-content: flex-end;
+    height: 185px;
+}
+
+nav {
+    margin-top: auto;
+}
