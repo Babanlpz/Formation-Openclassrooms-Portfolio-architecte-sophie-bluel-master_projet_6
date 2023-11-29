@@ -1,9 +1,11 @@
 // Variables
 const gallery = document.querySelector(".gallery");
 const filters = document.querySelectorAll(".filter");
+/**
+* Div .filter-container
+*/
+const filterContainer = document.querySelector('.filter-container');
 
-let works = [];
-let categories = [];
 
 /**
  * Fonction qui retourne le tableau works
@@ -11,9 +13,6 @@ let categories = [];
 async function getWorks() {
     return await fetch("http://localhost:5678/api/works")
         .then((res) => res.json())
-        .then((data) => {
-            works = data;
-        });
 }
 
 /**
@@ -22,20 +21,17 @@ async function getWorks() {
 async function categoriesImport() {
     return await fetch("http://localhost:5678/api/categories")
         .then((res) => res.json())
-        .then((data) => {
-            categories = data;
-        });
 }
 
 /**
- * 
+ * Fonction qui reset la gallery
  */
 function resetDisplayGallery(){
     gallery.innerHTML = "";
 }
 
 /**
- * 
+ * Fonction qui créer les Works de la gallery
  */
 function displayWork(work){
         /*
@@ -79,39 +75,58 @@ function displayWorks(worksArray) {
     });
 }
 
-
 /**
- * Fonction qui gére les filtres
+ * Boutons des filtres
  */
-function worksFilter() {
-    filters.forEach((filter) => {
-        const filterValue = filter.textContent;
-
-        filter.addEventListener("click", () => {
-            let filteredWorks = [];
-            if (filterValue === "Tous") {
-                filteredWorks = works;
-            } else {
-                filteredWorks = works.filter( 
-                    (work) => work.category.name === filterValue
-                );
-            }
-            displayWorks(filteredWorks);
-        });
+const buttonData = [
+    { id: -1, text: 'Tous' },
+    { id: 1, text: 'Objets' },
+    { id: 2, text: 'Appartements' },
+    { id: 3, text: 'Hotels & restaurants' }
+  ];
+  
+  /**
+   * Fonction qui créer les boutons des filtres
+   */
+  function createButtons() {
+    buttonData.forEach(data => {
+      const button = document.createElement('button');
+      button.className = 'filter';
+      button.setAttribute('data-id', data.id);
+      button.textContent = data.text;
+      filterContainer.appendChild(button);
     });
-}
+  }
+  
+ /**
+  * Fonction qui géres les filtres
+  */
+  function worksFilter() {
+    const filters = document.querySelectorAll('.filter');
+  
+    filters.forEach(filter => {
+      filter.addEventListener('click', async () => {
+        const filterValue = filter.getAttribute('data-id');
+        const works = await getWorks();
+        const filteredWorks = filterValue === '-1' ? works : works.filter(work => work.category.id === parseInt(filterValue));
+        displayWorks(filteredWorks);
+      });
+    });
+  }
 
 
 /**
- * 
+ * Fonction qui éxécute les fonctions du JS
  */
 async function init (){
 
-    await getWorks();
+    const works = await getWorks();
     displayWorks(works);
 
     
-    categoriesImport();
+    const categories = await categoriesImport();
+    // Création des bouttons dans le DOM
+    createButtons();
 
     worksFilter();
 }
