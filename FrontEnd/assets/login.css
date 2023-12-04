@@ -24,7 +24,8 @@ a {
     background-color: #1D6154;
     color: white;
     margin-top: 10px;
-    width: 15%;
+    margin-left: 24%;
+    width: 53%;
 }
 
 .login-position {
@@ -52,6 +53,11 @@ label {
     margin-bottom: 10px;
 }
 
+.lost-password {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .error-message {
     color: rgb(224, 3, 3);
     padding-top: 9px;

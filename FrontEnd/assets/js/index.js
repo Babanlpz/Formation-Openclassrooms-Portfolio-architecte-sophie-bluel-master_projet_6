@@ -107,12 +107,26 @@ const buttonData = [
     filters.forEach(filter => {
       filter.addEventListener('click', async () => {
         const filterValue = filter.getAttribute('data-id');
-        const works = await getWorks();
-        const filteredWorks = filterValue === '-1' ? works : works.filter(work => work.category.id === parseInt(filterValue));
+            const works = await getWorks();
+            let filteredWorks = [];
+
+            if (filterValue === "-1") {
+                filteredWorks = works;
+            } else {
+                filteredWorks = works.filter( 
+                    (work) => work.category.id === parseInt(filterValue)
+                );
+            }
         displayWorks(filteredWorks);
       });
     });
   }
+
+
+
+
+  // Condition si utilisateur connecté
+  
 
 
 /**
