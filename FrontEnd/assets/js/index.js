@@ -1,9 +1,15 @@
 // Variables
 const gallery = document.querySelector(".gallery");
 const filters = document.querySelectorAll(".filter");
-/**
-* Div .filter-container
-*/
+const modalImg = document.querySelector(".modal_img");
+const modal = document.querySelector("dialog");
+const modalButton = document.querySelectorAll(".modal-button");
+const closeModalIcon = document.querySelector(".close_modal_icon");
+const modalContent = document.querySelector(".modal_content");
+const editingToolsBanner = document.querySelector(".editing-tools-banner");
+const login = document.querySelector(".login");
+
+// Div .filter-container
 const filterContainer = document.querySelector('.filter-container');
 
 
@@ -78,6 +84,8 @@ function displayWorks(worksArray) {
 /**
  * Boutons des filtres
  */
+
+// TODO : Supprimer buttonData et utiliser à la place le résultat de categoriesImport
 const buttonData = [
     { id: -1, text: 'Tous' },
     { id: 1, text: 'Objets' },
@@ -124,11 +132,6 @@ const buttonData = [
 
 
 
-
-  // Condition si utilisateur connecté
-  
-
-
 /**
  * Fonction qui éxécute les fonctions du JS
  */
@@ -143,6 +146,7 @@ async function init (){
     createButtons();
 
     worksFilter();
+
 }
 
 init()

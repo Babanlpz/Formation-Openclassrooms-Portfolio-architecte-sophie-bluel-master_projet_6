@@ -6,27 +6,70 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="./assets/js/index.js" defer></script>
+	<script src="./assets/js/admin.js" defer></script>
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-	<nav>
-		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li><a href="./login.html" class="login">login</a></li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram" class="logo-instagram"></li>
-		</ul>
-	</nav>
+
+	<!-- Création depuis le JS si on est connecté -->
+	<div class="editing-tools-banner">
+		<button class="editing-tools_position modal-button">
+			<i class="fa-regular fa-pen-to-square"></i>
+			<p>Mode édition</p>
+		</button>
+		<button class="apply-change-btn">Publier les changements</button>
+	</div>
+	<!-- -->
+
+
+	<div class="logo-nav-position">
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+		<nav>
+			<ul>
+				<li>projets</li>
+				<li>contact</li>
+				<li><a href="./login.html" class="login">login</a></li>
+				<li><img src="./assets/icons/instagram.png" alt="Instagram" class="logo-instagram"></li>
+			</ul>
+		</nav>
+	</div>
 </header>
 <main>
+
+
+	<!-- Création depuis le JS si on est connecté -->
+	<dialog>
+		<i class="fa-solid fa-xmark close_modal_icon"></i>
+		<div class="modal_content">
+			<h3>Galerie photo</h3>
+			<div class="modal_img">
+			</div>
+			<span class="modal_line"></span>
+			<button class="modal_add-btn">Ajouter une photo</button>
+			<p class="modal_delete_gallery">Supprimer la galerie</p>
+		</div>
+	</dialog>
+	<!-- -->
+
+
+
 	<section id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">
+
+			<!-- Création depuis le JS si on est connecté -->
+			<button class="modal-button under-img">
+				<i class="fa-regular fa-pen-to-square"></i>
+				<p>Modifier</p>
+			</button>
+			<!-- -->
+
+
 		</figure>
 		<article>
 			<h2>Designer d'espace</h2>
@@ -36,14 +79,19 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="modal-button-and-h2">
+			
+			<h2>Mes Projets</h2>			
+
+			<!-- Création depuis le JS si on est connecté -->
+			<button class="modal-button">
+				<i class="fa-regular fa-pen-to-square"></i>
+				<p>Modifier</p>
+			</button>
+			<!-- -->
+
+		</div>
 		<div class="filter-container">
-			<!--
-			<button class="filter" data-id="-1">Tous</button>
-			<button class="filter" data-id="1">Objets</button>
-			<button class="filter" data-id="2">Appartements</button>
-			<button class="filter" data-id="3">Hotels & restaurants</button>
-			-->
 		</div>
 		<div class="gallery">
 		</div>
