@@ -4,9 +4,8 @@
 let token = localStorage.getItem("Token");
 
 if (token) {
-  /**
-   *  Request pour delete
-   */
+  // Sélection des éléments du DOM
+  // Sélection de la modale d'inscription
   function displayModal(worksArray) {
     let modalContentHTML = "";
     worksArray.forEach((work) => {
@@ -22,9 +21,8 @@ if (token) {
     modalImg.innerHTML = modalContentHTML;
     const modalDeleteWorkIcon = document.querySelectorAll(".modal_trash-icon");
 
-    /**
-     *  Supprimer les works
-     */
+    // Supprimer les works
+    // Lorsque l'utilisateur clique sur l'icône de la corbeille, le work est supprimé du backend et de l'interface utilisateur
     let deleteRequest = {
       method: "DELETE",
       headers: {
@@ -78,6 +76,7 @@ if (token) {
    * Fonction qui permet de générer des differentes catègories lors de la création d'un nouveau projet
    */
   function generateCategoryOptions() {
+    // Générer les options de catégories pour le select de creation de projets
     let optionsHTML = "";
     categories.forEach((category) => {
       optionsHTML += `<option value="${category.id}">${category.name}</option>`;
