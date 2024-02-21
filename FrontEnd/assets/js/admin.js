@@ -1,18 +1,16 @@
+/**
+ * Condition si utilisateur connecté
+ */
+let token = localStorage.getItem("Token");
 
+if (token) {
   /**
-   * Condition si utilisateur connecté
+   *  Request pour delete
    */
-  let token = localStorage.getItem("Token");
-
-  if (token) {
-
-    /**
-     *  Request pour delete
-     */
-    function displayModal(worksArray) {
+  function displayModal(worksArray) {
     let modalContentHTML = "";
     worksArray.forEach((work) => {
-        modalContentHTML += `
+      modalContentHTML += `
             <div class="modal_img-edit_position">
                 <img src="${work.imageUrl}">
                 <i class="fa-regular fa-trash-can modal_trash-icon" data-id="${work.id}"></i>
@@ -20,88 +18,89 @@
                 <p>éditer</p>
             </div>
         `;
-    })
+    });
     modalImg.innerHTML = modalContentHTML;
     const modalDeleteWorkIcon = document.querySelectorAll(".modal_trash-icon");
 
-
-    
     /**
      *  Supprimer les works
      */
     let deleteRequest = {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
 
+    // Supprimer les works
+    // Lorsque l'utilisateur clique sur l'icône de la corbeille, le work est supprimé du backend et de l'interface utilisateur
     modalDeleteWorkIcon.forEach((trashcan) => {
-        trashcan.addEventListener("click", () => {
-            const workId = trashcan.getAttribute("data-id");
-            fetch(`http://localhost:5678/api/works/${workId}`, deleteRequest)
-                .then((res) => {
-                    if (res.ok) {
-                        trashcan.parentElement.remove();
-                        const deletefigure = document.querySelector(`figure[data-id="${workId}"]`);
-                        deletefigure.remove();
-                    }
-                });
-        });
+      trashcan.addEventListener("click", () => {
+        const workId = trashcan.getAttribute("data-id");
+        fetch(`http://localhost:5678/api/works/${workId}`, deleteRequest).then(
+          (res) => {
+            // Si la requête est un succès, alors on supprime le work de l'interface utilisateur et du tableau des works
+            if (res.ok) {
+              trashcan.parentElement.remove();
+              const deletefigure = document.querySelector(
+                `figure[data-id="${workId}"]`
+              );
+              deletefigure.remove();
+            }
+          }
+        );
+      });
     });
+  }
 
+  /**
+   *  Fonction qui regroupe les différentes manière d'ouvrir et de fermé la modale
+   */
+  function OpenAndCloseModal() {
+    modalButton[2].addEventListener("click", () => {
+      modal.showModal();
+    });
+  }
+
+  // Fermer la modale lorsque l'ion clique en dehors de la modale ou sur le bouton fermer
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.close();
     }
+  });
 
-    /**
-     *  Fonction qui regroupe les différentes manière d'ouvrir et de fermé la modale
-     */
-    function OpenAndCloseModal() {
+  // Fermer la modale lorsque l'utilisateur clique sur le bouton de fermeture
+  closeModalIcon.addEventListener("click", () => {
+    modal.close();
+  });
 
-        modalButton[2].addEventListener("click", () => {
-            modal.showModal();
-        });
-    };
-
-    /**
-     * 
-     */
-    window.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            modal.close();
-        }
+  /**
+   * Fonction qui permet de générer des differentes catègories lors de la création d'un nouveau projet
+   */
+  function generateCategoryOptions() {
+    let optionsHTML = "";
+    categories.forEach((category) => {
+      optionsHTML += `<option value="${category.id}">${category.name}</option>`;
     });
+    return optionsHTML;
+  }
 
-    /**
-     * 
-     */
-    closeModalIcon.addEventListener("click", () => {
-        modal.close();
-    });
+  /**
+   * Fonction qui ajoute un nouveau work avec titre, catégorie et image
+   */
+  function displayAddWorkModal() {
+    let initialModalContentHTML = "";
+    const modalAddWorkBtn = document.querySelector(".modal_add-btn");
 
-    /**
-     * Fonction qui permet de générer des differentes catègories lors de la création d'un nouveau projet
-     */
-    function generateCategoryOptions() {
-        let optionsHTML = "";
-        categories.forEach((category) => {
-            optionsHTML += `<option value="${category.id}">${category.name}</option>`;
-        });
-        return optionsHTML;
-    }
-
-    /**
-     * Fonction qui ajoute un nouveau work avec titre, catégorie et image
-     */
-    function displayAddWorkModal() {
-        let initialModalContentHTML = "";
-        const modalAddWorkBtn = document.querySelector(".modal_add-btn");
-
-        modalAddWorkBtn.addEventListener("click", () => {
-            initialModalContentHTML = modalContent.innerHTML;
-
-            modalContent.innerHTML = "";
-            modalContent.innerHTML =
-                `
+    // Ajouter un work
+    // Lorsque l'utilisateur clique sur le bouton "Ajouter un work", une modale s'ouvre avec un formulaire pour ajouter un nouveau work à partir du formulaire
+    // Lorsque l'utilisateur soumet le formulaire, un nouveau work est ajouté au backend et à l'interface utilisateur
+    modalAddWorkBtn.addEventListener("click", () => {
+      initialModalContentHTML = modalContent.innerHTML;
+      // Création de la modale
+      // Lorsque l'utilisateur clique sur le bouton "Ajouter un work", une modale s'ouvre avec un formulaire pour ajouter un nouveau work à partir du formulaire
+      modalContent.innerHTML = "";
+      modalContent.innerHTML = `
                 <i class="fa-solid fa-arrow-left modal_add-work_return-icon"></i>
                 <div class="modal_content_add-work">
                     <h3>Ajout photo</h3>
@@ -135,127 +134,126 @@
                 </div>
             `;
 
+      const photoInput = document.getElementById("photo");
+      const titleInput = document.getElementById("titre");
+      const selectInput = document.getElementById("categorie");
+      const submitWorkButton = document.querySelector(
+        ".modal_add-work_confirm-btn"
+      );
+      const selectedImage = document.querySelector(".selected-img");
+      const invalidFormMessage = document.querySelector(
+        ".invalid-form-message"
+      );
+      const validFormMessage = document.querySelector(".valid-form-message");
+      const invalidRequestFormMessage = document.querySelector(
+        ".invalid-request-form-message"
+      );
+      const returnToDefaultModalButton = document.querySelector(
+        ".modal_add-work_return-icon"
+      );
 
-            const photoInput = document.getElementById("photo");
-            const titleInput = document.getElementById("titre");
-            const selectInput = document.getElementById("categorie");
-            const submitWorkButton = document.querySelector(".modal_add-work_confirm-btn");
-            const selectedImage = document.querySelector(".selected-img");
-            const invalidFormMessage = document.querySelector(".invalid-form-message");
-            const validFormMessage = document.querySelector(".valid-form-message");
-            const invalidRequestFormMessage = document.querySelector(".invalid-request-form-message");
-            const returnToDefaultModalButton = document.querySelector(".modal_add-work_return-icon");
-
-            // Fonction de retour sur la modale
-            returnToDefaultModalButton.addEventListener("click", () => {
-                modalContent.innerHTML = initialModalContentHTML;
-                getWorks();
-                displayAddWorkModal();
-            });
-
-
-
-            //Affichage de l'image lors de sa selection 
-            photoInput.addEventListener("change", () => {
-                const file = photoInput.files[0];
-                const reader = new FileReader();
-
-                reader.onload = (e) => {
-                    selectedImage.src = e.target.result;
-                    const addImgForm = document.querySelector(".add-img-form");
-                    const formElements = addImgForm.querySelectorAll(".add-img-form > *");
-
-                    formElements.forEach((element) => {
-                        element.style.display = "none";
-                    });
-                    selectedImage.style.display = "flex";
-                };
-                reader.readAsDataURL(file);
-            });
-
-
-
-            /**
-             * Ajouter des works
-             */
-            function createNewWork() {
-                submitWorkButton.addEventListener("click", () => {
-                    if (photoInput.value === '' || titleInput.value === '' || selectInput.value === '') {
-                        invalidFormMessage.style.display = "block";
-                        return;
-                    }
-
-                    let formData = new FormData();
-
-                    formData.append("image", photoInput.files[0]);
-                    formData.append("title", titleInput.value);
-                    formData.append("category", selectInput.value);
-
-                    let addRequest = {
-                        method: "POST",
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                        body: formData
-                    };
-
-                    fetch("http://localhost:5678/api/works", addRequest)
-                        .then((res) => {
-                            if (res.ok) {
-                                invalidFormMessage.style.display = "none";
-                                validFormMessage.style.display = "block";
-                                submitWorkButton.classList.add("active")
-
-                            } else {
-                                invalidFormMessage.style.display = "none";
-                                invalidRequestFormMessage.style.display = "block"
-                            }
-                        });
-                });
-            }
-            createNewWork();
-        });
-    }
-
-
-    /**
-     * Fonction qui éxécute les fonctions du JS
-     */
-    async function init (){
-
-        editingToolsBanner.style.display = "flex";
-
-        modalButton.forEach((button) => {
-            button.style.display = "flex";
-        });
-    
-        login.innerHTML = "logout"
-        login.addEventListener("click", () => {
-            localStorage.removeItem("Token")
-            window.location.href = "login.html"
-        })
-    
-    
-
-        
-        const works = await getWorks();
-
-        OpenAndCloseModal();
-        displayModal(works)
-
+      // Fonction de retour sur la modale
+      // Lorsque l'utilisateur clique sur le bouton de retour, la modale revient à son état initial et les champs sont vidés par défaut
+      returnToDefaultModalButton.addEventListener("click", () => {
+        modalContent.innerHTML = initialModalContentHTML;
+        getWorks();
         displayAddWorkModal();
-    }
+      });
 
-    init()
-} 
+      //Affichage de l'image lors de sa selection
+      photoInput.addEventListener("change", () => {
+        const file = photoInput.files[0];
+        const reader = new FileReader();
 
-/**
- * TODO : 
- * - Sur l'accueil, non connecté, afficher les catégories reçuent dynamiquement (createButtons)
- * - Si connecté, tous les bouttons de modification, les créer et les insérer dynamiqement en javascript (pour raison de sécurité)
- * - Si connecté, si au click sur un bouton de modification alors on créer et on ajoute la modal
- * - Si on ferme la modal, on supprime la modal 
- * - Si connecté, alors on fais le même principe avec la modale 2 
- * - dans la deuxième modale, dans les catégories aller chercher dynamiquement
- * 
- */
+        // Affichage de l'image lors de sa selection si le fichier est une image
+        // Lorsque l'utilisateur sélectionne une image, l'image est affichée dans la modale
+        reader.onload = (e) => {
+          selectedImage.src = e.target.result;
+          const addImgForm = document.querySelector(".add-img-form");
+          const formElements = addImgForm.querySelectorAll(".add-img-form > *");
+
+          formElements.forEach((element) => {
+            element.style.display = "none";
+          });
+          selectedImage.style.display = "flex";
+        };
+        reader.readAsDataURL(file);
+      });
+
+      /**
+       * Ajouter des works
+       */
+      function createNewWork() {
+        submitWorkButton.addEventListener("click", () => {
+          // Ajouter un work
+          if (
+            photoInput.value === "" ||
+            titleInput.value === "" ||
+            selectInput.value === ""
+          ) {
+            invalidFormMessage.style.display = "block";
+            return;
+          }
+
+          // Créer un objet FormData pour envoyer les données du formulaire
+          let formData = new FormData();
+
+          formData.append("image", photoInput.files[0]);
+          formData.append("title", titleInput.value);
+          formData.append("category", selectInput.value);
+
+          // Envoi de la requête pour ajouter un work
+          let addRequest = {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          };
+
+          // Requête POST a l'API pour ajouter un work
+          fetch("http://localhost:5678/api/works", addRequest).then((res) => {
+            // Si la requête est un succès, alors on affiche un message de succès et on ajoute le work à l'interface utilisateur
+            if (res.ok) {
+              invalidFormMessage.style.display = "none";
+              validFormMessage.style.display = "block";
+              submitWorkButton.classList.add("active");
+            }
+            // Si la requête est un échec, alors on affiche un message d'erreur
+            else {
+              invalidFormMessage.style.display = "none";
+              invalidRequestFormMessage.style.display = "block";
+            }
+          });
+        });
+      }
+      createNewWork();
+    });
+  }
+
+  /**
+   * Fonction qui éxécute les fonctions du JS
+   */
+  async function init() {
+    editingToolsBanner.style.display = "flex";
+
+    modalButton.forEach((button) => {
+      button.style.display = "flex";
+    });
+
+    login.innerHTML = "logout";
+    login.addEventListener("click", () => {
+      localStorage.removeItem("Token");
+      window.location.href = "login.html";
+    });
+
+    const works = await getWorks();
+
+    OpenAndCloseModal();
+    displayModal(works);
+
+    displayAddWorkModal();
+  }
+
+  init();
+}
