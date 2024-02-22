@@ -4,6 +4,36 @@
 let token = localStorage.getItem("Token");
 
 if (token) {
+  /**
+   *
+   */
+  function displayAdminButtons() {
+    // Création du bouton n°1
+    const banner = document.querySelector(".editing-tools-banner");
+    banner.innerHTML = `
+      <button class="editing-tools_position modal-button">
+				<i class="fa-regular fa-pen-to-square"></i>
+				<p>Mode édition</p>
+			</button>
+			<button class="apply-change-btn">Publier les changements</button>
+      `;
+
+    // Création du bouton n°2
+
+    // Création du bouton n°3
+    // Création la modale n°1
+    // Remplissage de la modale n°1
+    // Création la modale n°2
+    // Remplissage de la modale n°2
+
+    // Création des listeners sur le button n°1
+    const btnModal = document.querySelector(".apply-change-btn");
+    btnModal.addEventListener("click", () => {
+      modal.showModal();
+    });
+    //Création des listeners sur le button n°2
+  }
+
   // Sélection des éléments du DOM
   // Sélection de la modale d'inscription
   function displayModal(worksArray) {
@@ -84,6 +114,18 @@ if (token) {
     return optionsHTML;
   }
 
+  async function importCategories() {
+    return await fetch("http://localhost:5678/api/categories")
+      .then((res) => res.json())
+      .then((categories) => {
+        let options = "";
+        categories.forEach(
+          (category) =>
+            (options += `<option value="${category.id}">${category.name}</option>`)
+        );
+        return options;
+      });
+  }
   /**
    * Fonction qui ajoute un nouveau work avec titre, catégorie et image
    */
@@ -94,7 +136,9 @@ if (token) {
     // Ajouter un work
     // Lorsque l'utilisateur clique sur le bouton "Ajouter un work", une modale s'ouvre avec un formulaire pour ajouter un nouveau work à partir du formulaire
     // Lorsque l'utilisateur soumet le formulaire, un nouveau work est ajouté au backend et à l'interface utilisateur
-    modalAddWorkBtn.addEventListener("click", () => {
+    modalAddWorkBtn.addEventListener("click", async () => {
+      const categories = await importCategories();
+
       initialModalContentHTML = modalContent.innerHTML;
       // Création de la modale
       // Lorsque l'utilisateur clique sur le bouton "Ajouter un work", une modale s'ouvre avec un formulaire pour ajouter un nouveau work à partir du formulaire
@@ -119,8 +163,7 @@ if (token) {
                             <div class="modal_add-work_input">
                                 <label for="categorie">Catégorie</label>
                                 <select name="categorie" id="categorie">
-                                    <option value=""></option>
-                                    ${categoriesImport()}
+                                    ${categories}
                                 </select>
                             </div>
                         </div>
@@ -234,6 +277,8 @@ if (token) {
    * Fonction qui éxécute les fonctions du JS
    */
   async function init() {
+    //displayAdminButtons();
+
     editingToolsBanner.style.display = "flex";
 
     modalButton.forEach((button) => {
