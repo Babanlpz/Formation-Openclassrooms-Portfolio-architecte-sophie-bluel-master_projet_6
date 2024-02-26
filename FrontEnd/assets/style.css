@@ -516,7 +516,8 @@ a {
 
 /** Filtre **/
 
-.filter-container {
+.filter-container,
+.btnFilter {
   display: flex;
   justify-content: center;
   padding-bottom: 50px;
@@ -524,7 +525,8 @@ a {
 }
 
 .filter,
-.login-btn {
+.login-btn,
+.btnFilter {
   font-family: "Syne";
   color: #1d6154;
   background-color: white;
@@ -533,17 +535,20 @@ a {
   padding: 8px 13px 8px 13px;
 }
 
-.login-btn:hover {
+.login-btn:hover,
+.btnFilter:hover {
   background-color: #227566;
 }
 
-.filter:hover {
+.filter:hover,
+.btnFilter:hover {
   background-color: #1d6154;
   color: white;
   cursor: pointer;
 }
 
-.filter.active {
+.filter.active,
+.btnFilter.active {
   background-color: #1d6154;
   color: white;
   cursor: pointer;

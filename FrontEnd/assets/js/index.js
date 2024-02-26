@@ -67,58 +67,92 @@ function displayWorks(worksArray) {
   });
 }
 
-// Tableau de données pour les boutons de filtre
-// Chaque bouton a un id et un texte
-// L'id correspond à l'id de la catégorie
-const buttonData = [
-  { id: -1, text: "Tous" },
-  { id: 1, text: "Objets" },
-  { id: 2, text: "Appartements" },
-  { id: 3, text: "Hotels & restaurants" },
-];
+// Récupérer dynamiquement les categories de l'architecture.
 
-// Fonction qui crée les boutons de filtre
-// Elle crée un bouton pour chaque élément du tableau buttonData
-// Elle ajoute chaque bouton à filterContainer
-function createButtons() {
-  buttonData.forEach((data) => {
-    const button = document.createElement("button");
-    button.className = "filter";
-    button.setAttribute("data-id", data.id);
-    button.textContent = data.text;
-    filterContainer.appendChild(button);
+// Récupération des catégories de l'API (fetch GET)
+fetch("http://localhost:5678/api/categories")
+  .then((response) => response.json())
+  .then((categories) => displayCategory(categories))
+  .catch((error) => {
+    alert(`Erreur :` + error);
   });
-}
 
-// Fonction qui filtre les works
-// Elle ajoute un écouteur d'événement à chaque bouton de filtre
-// Lorsque l'utilisateur clique sur un bouton, elle filtre les works en fonction de l'id du bouton
-// Elle utilise la fonction displayWorks pour afficher les works filtrés
-function worksFilter() {
-  const filters = document.querySelectorAll(".filter");
+function displayCategory(categories) {
+  // Création de l'élément du Dom qui accueillera les filtres
+  const sectionFiltres = document.querySelector(".filtres");
 
-  // Ajoute un écouteur d'événement à chaque bouton de filtre
-  filters.forEach((filter) => {
-    filter.addEventListener("click", async () => {
-      const filterValue = filter.getAttribute("data-id");
-      const works = await getWorks();
-      let filteredWorks = [];
+  // Création du bouton Tous
+  const buttonAll = document.createElement("button");
+  buttonAll.textContent = "Tous";
+  buttonAll.classList.add("btnFilter");
+  sectionFiltres.appendChild(buttonAll);
 
-      // Si le filtre est -1, on affiche tous les works
-      if (filterValue === "-1") {
-        filteredWorks = works;
-      }
-      // Sinon, on filtre les works en fonction de l'id du bouton
-      else {
-        filteredWorks = works.filter(
-          (work) => work.category.id === parseInt(filterValue)
-        );
-      }
-      displayWorks(filteredWorks);
+  // Mise en place de la class active sur le premier bouton
+  let firstButtonsSelected = document.querySelector(".btnFilter");
+  firstButtonsSelected.classList.add("active");
+
+  // Appel des travaux via le bouton Tous
+  buttonAll.addEventListener("click", (event) => {
+    event.preventDefault();
+    const sectionGallery = document.querySelector(".gallery");
+    sectionGallery.innerHTML = "";
+    fetch("http://localhost:5678/api/works")
+      .then((response) => response.json())
+      .then((works) => displayWorks(works))
+      .catch((error) => {
+        alert(`Erreur :` + error);
+      });
+    setActiveButton(buttonAll);
+  });
+
+  for (let index = 0; index < categories.length; index++) {
+    const categoryIndex = categories[index];
+
+    // Création d'une balise dédiée à un bouton filtre de la gallerie
+    const categoryElement = document.createElement("button");
+    categoryElement.classList.add("btnFilter");
+    categoryElement.innerHTML = categoryIndex.name;
+
+    // Lien entre la balise input et la section filtre
+    sectionFiltres.appendChild(categoryElement);
+
+    // Affichage des travaux selon bouton cliqué
+    categoryElement.addEventListener("click", (event) => {
+      event.preventDefault();
+      selectCategory(categoryIndex.id);
+      setActiveButton(categoryElement);
     });
+  }
+}
+
+// Fonction qui permet de sélectionner le bouton sur lequel on clique
+function setActiveButton(button) {
+  const buttons = document.querySelectorAll(".btnFilter");
+  buttons.forEach((btn) => {
+    if (btn === button) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
   });
 }
 
+// Fonction qui permet le tri des catégories
+function selectCategory(categoryId) {
+  fetch("http://localhost:5678/api/works")
+    .then((response) => response.json())
+    .then((works) => {
+      const selectWorks = works.filter(
+        (works) => works.categoryId === categoryId
+      );
+      const sectionGallery = document.querySelector(".gallery");
+      sectionGallery.innerHTML = "";
+      displayWorks(selectWorks);
+    })
+    .catch((error) => {
+      alert(`Erreur :` + error);
+    });
+}
 /**
  * Fonction qui éxécute les fonctions du JS
  */

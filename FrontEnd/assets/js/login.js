@@ -10,6 +10,9 @@ const form = document.querySelector("form"); // Sélectionnez votre formulaire e
 function loginRequest(event) {
   event.preventDefault(); // Empêche le comportement par défaut du formulaire (rechargement de la page).
 
+  // Récupération des valeurs des champs email et password
+  // Les valeurs sont stockées dans les variables emailValue et passwordValue
+  // Ces valeurs sont utilisées pour se connecter à l'API
   const emailValue = inputs[0].value;
   const passwordValue = inputs[1].value;
 
@@ -55,6 +58,8 @@ form.addEventListener("submit", loginRequest);
 
 inputs.forEach((input) => {
   input.addEventListener("keydown", (e) => {
+    // Si la touche appuyée est "Enter", appelez la fonction loginRequest.
+    // Passez l'événement à la fonction.
     if (e.key === "Enter") {
       loginRequest(e); // Passez l'événement à la fonction loginRequest.
     }

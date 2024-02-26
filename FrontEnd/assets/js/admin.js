@@ -90,7 +90,7 @@ if (token) {
     });
   }
 
-  // Fermer la modale lorsque l'ion clique en dehors de la modale ou sur le bouton fermer
+  // Fermer la modale lorsque l'on clique en dehors de la modale ou sur le bouton fermer
   window.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.close();
@@ -109,15 +109,20 @@ if (token) {
     // Générer les options de catégories pour le select de creation de projets
     let optionsHTML = "";
     categories.forEach((category) => {
+      // Pour chaque catégorie, on crée une option avec la valeur de l'id de la catégorie et le nom de la catégorie
+      // Ces options sont ajoutées à la variable optionsHTML
       optionsHTML += `<option value="${category.id}">${category.name}</option>`;
     });
     return optionsHTML;
   }
 
+  // Fonction qui récupère les works
   async function importCategories() {
     return await fetch("http://localhost:5678/api/categories")
       .then((res) => res.json())
       .then((categories) => {
+        // Générer les options de catégories pour le select de creation de projets
+        // Pour chaque catégorie, on crée une option avec la valeur de l'id de la catégorie et le nom de la catégorie
         let options = "";
         categories.forEach(
           (category) =>
@@ -141,7 +146,8 @@ if (token) {
 
       initialModalContentHTML = modalContent.innerHTML;
       // Création de la modale
-      // Lorsque l'utilisateur clique sur le bouton "Ajouter un work", une modale s'ouvre avec un formulaire pour ajouter un nouveau work à partir du formulaire
+      // Lorsque l'utilisateur clique sur le bouton "Ajouter un work", une modale s'ouvre avec un formulaire
+      // pour ajouter un nouveau work à partir du formulaire
       modalContent.innerHTML = "";
       modalContent.innerHTML = `
                 <i class="fa-solid fa-arrow-left modal_add-work_return-icon"></i>
@@ -215,8 +221,10 @@ if (token) {
           const formElements = addImgForm.querySelectorAll(".add-img-form > *");
 
           formElements.forEach((element) => {
+            // On cache les éléments du formulaire pour afficher l'image et le bouton supprimer
             element.style.display = "none";
           });
+          // On affiche l'image et le bouton supprimer
           selectedImage.style.display = "flex";
         };
         reader.readAsDataURL(file);
@@ -229,10 +237,12 @@ if (token) {
         submitWorkButton.addEventListener("click", () => {
           // Ajouter un work
           if (
+            // Si l'un des champs est vide, alors on affiche un message d'erreur
             photoInput.value === "" ||
             titleInput.value === "" ||
             selectInput.value === ""
           ) {
+            // Si l'un des champs est vide, alors on affiche un message d'erreur
             invalidFormMessage.style.display = "block";
             return;
           }
@@ -240,6 +250,7 @@ if (token) {
           // Créer un objet FormData pour envoyer les données du formulaire
           let formData = new FormData();
 
+          // Ajout des données du formulaire à l'objet FormData
           formData.append("image", photoInput.files[0]);
           formData.append("title", titleInput.value);
           formData.append("category", selectInput.value);
